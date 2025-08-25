@@ -1,0 +1,14 @@
+{
+  "name": "03_express",
+  "version": "1.0.0",
+  "description": "express 웹 서버 만들기",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
