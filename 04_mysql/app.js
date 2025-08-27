@@ -15,10 +15,8 @@ app.get("/", (req, resp) => {
 app.get("/customers", async (req, resp) => {
   try {
     let customerList = await sql.execute("select * from customers");
-    console.log(customerList);
     resp.json(customerList);
   } catch (err) {
-    console.log(err);
     resp.json({ retCode: "Error" });
   }
 });
@@ -32,6 +30,7 @@ app.post("/customer", async (req, resp) => {
     );
     resp.json(result);
   } catch (err) {
+    console.log(err);
     resp.json({ retCode: "Error" });
   }
 });
@@ -46,6 +45,21 @@ app.delete("/customer/:id", async (req, resp) => {
     );
     resp.json(result);
   } catch (err) {
+    resp.json({ retCode: "Error" });
+  }
+});
+
+//수정.
+app.put("/customer", async (req, resp) => {
+  console.log(req.body);
+  try {
+    let result = await sql.execute(
+      "update customers set name=?,email=?,phone=? where id = ?", //
+      [req.body.name, req.body.email, req.body.phone, req.body.id]
+    );
+    resp.json(result);
+  } catch (err) {
+    console.log(err);
     resp.json({ retCode: "Error" });
   }
 });

@@ -6,8 +6,30 @@
     <title>Document</title>
   </head>
   <body>
-    <form action="http://localhost:3000/main" method="post">
-      <input type="submit" value="Post요청" />
+    <form action="mail" method="post">
+      <table>
+        <tr>
+          <th>보내는이:</th>
+          <td><input type="email" name="sender" value="leadon@daum.net" /></td>
+        </tr>
+        <tr>
+          <th>받는이:</th>
+          <td><input type="email" name="receiver" /></td>
+        </tr>
+        <tr>
+          <th>제목:</th>
+          <td><input type="text" name="subject" /></td>
+        </tr>
+        <tr>
+          <th>내용:</th>
+          <td><textarea name="content"></textarea></td>
+        </tr>
+        <tr>
+          <td colspan="2" align="center">
+            <input type="submit" value="Post요청" />
+          </td>
+        </tr>
+      </table>
     </form>
   </body>
 </html>
