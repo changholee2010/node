@@ -3,9 +3,6 @@ require("dotenv").config({
   path: "./.env",
 });
 const nodemail = require("./nodemail");
-// const process = require("process");
-
-console.log(process.env);
 
 const app = express();
 app.use(express.urlencoded());
@@ -54,6 +51,9 @@ app.post("/mail", async (req, resp) => {
   result = await nodemail.mailSend(data);
   resp.send(result);
 });
+
+// "/excel_down" => customers 테이블의 데이터를 logs/customer2.xlsx로 저장.
+app.get("/excel_down", (req, resp) => {});
 
 app.listen(3000, () => {
   console.log("http://localhost:3000");

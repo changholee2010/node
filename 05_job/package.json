@@ -10,10 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cluster": "^0.7.7",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "mysql2": "^3.14.3",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.5",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
