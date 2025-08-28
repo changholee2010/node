@@ -3,12 +3,13 @@ const express = require("express");
 const parser = require("body-parser");
 const sql = require("./sql");
 const prodSql = require("./sql/sql");
-
+const cors = require("cors");
 // console.log(prodSql["productMainImage"].query);
 
 const app = express();
 app.use(parser.urlencoded()); // x-www-form-urlencoded
 app.use(parser.json());
+app.use(cors());
 
 app.get("/", (req, resp) => {
   resp.send("/ 실행");
@@ -35,7 +36,38 @@ app.get("/customers", async (req, resp) => {
     resp.json({ retCode: "Error" });
   }
 });
-
+app.get("/products", async (req, resp) => {
+  try {
+    resp.json([
+      {
+        product_name: "기계식 키보드",
+        price: 25000,
+        category: "노트북/태블릿",
+        delivery_price: 5000,
+      },
+      {
+        product_name: "무선 마우스",
+        price: 12000,
+        category: "노트북/태블릿",
+        delivery_price: 5000,
+      },
+      {
+        product_name: "아이패드",
+        price: 725000,
+        category: "노트북/태블릿",
+        delivery_price: 5000,
+      },
+      {
+        product_name: "무선충전기",
+        price: 42000,
+        category: "노트북/태블릿",
+        delivery_price: 5000,
+      },
+    ]);
+  } catch (err) {
+    resp.json({ retCode: "Error" });
+  }
+});
 // 등록.
 app.post("/customer", async (req, resp) => {
   try {
