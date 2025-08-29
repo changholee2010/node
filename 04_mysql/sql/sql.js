@@ -7,8 +7,8 @@ module.exports = {
             left outer join t_image t2
                          on t1.id = t2.product_id
                         and t2.type = 1
-            left outer join t_category t3
-                         on t1.category_id = t3.id`,
+            join t_category t3
+              on t1.category_id = t3.id`,
   },
   productList2: {
     query: `select t3.*
@@ -16,7 +16,7 @@ module.exports = {
             from (select t1.*
                   from t_product t1, t_category t2
                   where t1.category_id = t2.id) t3
-            left join (select * from t_image where type=1) t4
+            left join (select * from t_image where type = 1) t4
                    on t3.id = t4.product_id`,
   },
   productDetail: {
@@ -28,7 +28,7 @@ module.exports = {
                 ,t_category t3
             where t1.id = ?
             and   t1.id = t2.product_id
-            and   t2.type = ?
+            and   t2.type = 2
             and   t1.category_id = t3.id`,
   },
   productMainImage: {

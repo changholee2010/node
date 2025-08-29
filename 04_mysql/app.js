@@ -23,6 +23,7 @@ app.post("/api/:alias", async (req, resp) => {
     let result = await sql.execute(search, param);
     resp.json(result);
   } catch (err) {
+    console.log(err);
     resp.json({ retCode: "Error" });
   }
 });

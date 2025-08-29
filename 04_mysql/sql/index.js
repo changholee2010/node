@@ -17,7 +17,6 @@ function execute(sql = "select * from customers", param = []) {
       if (err) {
         return reject(err);
       }
-
       connection.query(sql, param, (queryErr, results) => {
         connection.release(); // connection => pool 환원.
         if (queryErr) {
