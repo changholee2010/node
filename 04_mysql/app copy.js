@@ -4,48 +4,70 @@ const parser = require("body-parser");
 const sql = require("./sql");
 const prodSql = require("./sql/sql");
 const cors = require("cors");
-const fs = require("fs");
+// console.log(prodSql["productMainImage"].query);
 
 const app = express();
 app.use(parser.urlencoded()); // x-www-form-urlencoded
-app.use(
-  express.json({
-    limit: "10mb",
-  })
-);
+app.use(parser.json());
 app.use(cors());
 
 app.get("/", (req, resp) => {
   resp.send("/ 실행");
 });
 
-app.post("/upload/:file_name", (req, resp) => {
-  let file_name = req.params.file_name;
-  let data = req.body.param;
-  // console.log(file_name);
-  // console.log(data);
-  fs.writeFile(__dirname + "/uploads/" + file_name, data, "base64", (err) => {
-    if (err) {
-      resp.send(err);
-      return;
+// 파일을 복사한 후 (upload) 에 DB에 insert image 처리.
+app.post("/uploads/:productId/:type/:fileName", async (req, res) => {
+  let { productId, type, fileName } = req.params;
+  const dir = `${__dirname}/uploads/${productId}`;
+  const file = `${dir}/${fileName}`;
+  if (!req.body.data)
+    return fs.unlink(file, async (err) =>
+      res.send({
+        err,
+      })
+    );
+
+  const data = req.body.data.slice(req.body.data.indexOf(";base64,") + 8);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+  fs.writeFile(file, data, "base64", async (error) => {
+    // Origin.
+    // await exec.db("productImageInsert", [
+    //   {
+    //     product_id: productId,
+    //     type: type,
+    //     path: fileName,
+    //   },
+    // ]);
+    // Translate.
+    await sql.execute("productImageInsert", {
+      product_id: productId,
+      type: type,
+      path: fileName,
+    });
+
+    if (error) {
+      res.send({
+        error,
+      });
+    } else {
+      res.send("ok");
     }
-    resp.send("ok");
   });
 });
 
-// 이미지 링크정보.
-app.get("/download/:product_id/:path", (req, resp) => {
-  let product_id = req.params.product_id;
-  let path = req.params.path; // keyboard.jpg image/jpg
-  console.log(path);
-  resp.header("Content-Type", `image/${path.substring(path.lastIndexOf("."))}`);
-  const filepath = `${__dirname}/uploads/${product_id}/${path}`;
-
-  if (!fs.existsSync(filepath)) {
-    resp.send(404, { error: "file not found" });
-    return;
-  }
-  fs.createReadStream(filepath).pipe(resp);
+// 이미지 다운로드.
+app.get("/download/:productId/:fileName", (req, res) => {
+  const { productId, type, fileName } = req.params;
+  const filepath = `${__dirname}/uploads/${productId}/${fileName}`;
+  res.header(
+    "Content-Type",
+    `image/${fileName.substring(fileName.lastIndexOf("."))}`
+  );
+  if (!fs.existsSync(filepath))
+    res.send(404, {
+      error: "Can not found file.",
+    });
+  else fs.createReadStream(filepath).pipe(res); // readable stream을 writable stream으로 연결. 즉 출력화면에 이미지 출력.
 });
 
 // 상품관련해서 만든 라우팅 정보.

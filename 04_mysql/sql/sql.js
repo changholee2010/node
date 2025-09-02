@@ -28,7 +28,7 @@ module.exports = {
                 ,t_category t3
             where t1.id = ?
             and   t1.id = t2.product_id
-            and   t2.type = 2
+            and   t2.type = 3
             and   t1.category_id = t3.id`,
   },
   productMainImage: {
